@@ -1,1 +1,0 @@
-Pas le temps d'ecrire un bon READ ME pour l'instant Changement depuis le RSpi (premier commit de test)
