@@ -2,6 +2,8 @@ package com.milad.pi4led.controller;
 
 import com.pi4j.io.gpio.*;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -11,7 +13,15 @@ public class LedController {
 
     @RequestMapping("/")
     public String greeting() {
+
         return "Hello world!";
+    }
+
+    @RequestMapping("/data")
+    @ResponseBody
+    public String greeting(@RequestParam("message") String message) {
+
+        return "Hello world! the data is: " + message;
     }
 
     @RequestMapping("/toggle")
