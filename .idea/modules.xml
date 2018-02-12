@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/workspaceMultiIDE.iml" filepath="$PROJECT_DIR$/workspaceMultiIDE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/e-tron.iml" filepath="$PROJECT_DIR$/.idea/e-tron.iml" />
     </modules>
   </component>
 </project>

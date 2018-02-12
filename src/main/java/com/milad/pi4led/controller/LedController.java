@@ -1,29 +1,38 @@
 package com.milad.pi4led.controller;
 
 import com.pi4j.io.gpio.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.*;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ErrorMessages;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+
 
 @RestController
+@RequestMapping(value = "/api/products")
+@Api(value="ProductsControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LedController {
 
     private static GpioPinDigitalOutput pin;
-
-    @RequestMapping("/")
+/*
     public String greeting() {
 
         return "Hello world!";
     }
+*/
+    @RequestMapping(value = "/{num}", method = RequestMethod.GET)
+    @ApiOperation("Afficher le message")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = ErrorMessages.class)})
+    public String getMessage(@PathVariable("num") String num) {
 
-    @RequestMapping("/data")
-    @ResponseBody
-    public String greeting(@RequestParam("message") String message) {
+        System.out.println("je suis la");
+        System.out.println(num.toString());
 
-        return "Hello world! the data is: " + message;
+        return "Numero du Gpio à traiter :" + num;
     }
-
+/*
     @RequestMapping("/toggle")
     public String toggle() {
 
@@ -65,6 +74,7 @@ public class LedController {
 
     public GpioPinDigitalOutput getPin() {
 
+
         if (pin == null) {
             GpioController gpio = GpioFactory.getInstance();
             pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_25, "MyLED", PinState.LOW);
@@ -72,5 +82,5 @@ public class LedController {
 
         return pin;
     }
-
+*/
 }

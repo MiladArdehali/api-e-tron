@@ -1,2 +1,3 @@
+com\milad\pi4led\SwaggerConfig.class
 com\milad\pi4led\Application.class
 com\milad\pi4led\controller\LedController.class
