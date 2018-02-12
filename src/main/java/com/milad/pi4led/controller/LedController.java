@@ -27,7 +27,6 @@ public class LedController {
     @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = ErrorMessages.class)})
     public String getMessage(@PathVariable("num") String num) {
 
-        System.out.println("je suis la");
         System.out.println(num.toString());
 
         return "Numero du Gpio à traiter :" + num;
