@@ -76,9 +76,7 @@ public class LedController {
 	}
 
 	
-	@RequestMapping(value = "/getPin", method = RequestMethod.GET)
-	@ApiOperation("Attibuer le Pin")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+
 	public GpioPinDigitalOutput getPin() {
 
 		if (pin == null) {
