@@ -90,9 +90,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String numPin(@PathVariable("numPin") int numPin) {
 		
-		RaspiPin raspiPin = new RaspiPin();
 		JSONObject jsonObject = new JSONObject();
-		Pin pin = raspiPin.getPinByName("GPIO "+numPin);
+		Pin pin = RaspiPin.getPinByName("GPIO "+numPin);
 		
 		if(pin != null) {
 			ObjectMapper mapper = new ObjectMapper();
