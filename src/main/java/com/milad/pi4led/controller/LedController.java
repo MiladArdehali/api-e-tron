@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class LedController {
 
 	private static GpioPinDigitalOutput pin;
-	public static HashMap<Integer, Pin> listPin = new HashMap<Integer, Pin>();
+	public static HashMap<Integer, GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
 
 	// @RequestMapping(value = "/{num1}/{num2}", method = RequestMethod.GET)
 	// @ApiOperation("Afficher le message")
@@ -44,7 +44,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String toggle(@PathVariable("num") int numPin) {
 
-		((GpioPinDigitalOutput) listPin.get(numPin)).toggle();
+		(listPin.get(numPin)).toggle();
 		// getPin(num).toggle();
 
 		return "OK";
@@ -56,7 +56,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	private String checkState(@PathVariable("numPin") int numPin) {
 
-		return (((GpioPinDigitalOutput) listPin.get(numPin)).isHigh() ? "Light is on" : "Light is off");
+		return (( listPin.get(numPin)).isHigh() ? "Light is on" : "Light is off");
 		// return (getPin(numPin).isHigh() ? "Light is on" : "Light is off");
 	}
 
@@ -65,7 +65,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String on(@PathVariable("numPin") int numPin) {
 
-		((GpioPinDigitalOutput) listPin.get(numPin)).high();
+		(listPin.get(numPin)).high();
 		// getPin(numPin).high();
 
 		return checkState(numPin);
@@ -76,7 +76,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String off(@PathVariable("numPin") int numPin) {
 
-		((GpioPinDigitalOutput) listPin.get(numPin)).low();
+		(listPin.get(numPin)).low();
 		// getPin(numPin).low();
 
 		return checkState(numPin);
@@ -88,7 +88,7 @@ public class LedController {
 	public String blink(@PathVariable("numPin") int numPin, @PathVariable("delay") long delay,
 			@PathVariable("duration") long duration) {
 
-		((GpioPinDigitalOutput) listPin.get(numPin)).blink(delay, duration);
+		(listPin.get(numPin)).blink(delay, duration);
 		// getPin(numPin).blink(delay, duration);
 		return "Light is blinking";
 	}
@@ -98,7 +98,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String pulse(@PathVariable("numPin") int numPin, @PathVariable("duration") long duration) {
 
-		((GpioPinDigitalOutput) listPin.get(numPin)).pulse(duration);
+		(listPin.get(numPin)).pulse(duration);
 		// getPin(numPin).pulse(duration);
 		return "Light is pulsing";
 	}
@@ -137,7 +137,7 @@ public class LedController {
 		if (listPin.get(numPin) == null) {
 			GpioController gpio = GpioFactory.getInstance();
 			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomDuPin, PinState.LOW);
-			listPin.put(numPin, listGpio.getPin(numPin));
+			listPin.put(numPin, pin);
 		}
 
 		return "Methode testGetPin OK";
