@@ -108,19 +108,19 @@ public class LedController {
 		
 	}
 	
-//	@RequestMapping(value = "/test/{num}", method = RequestMethod.GET)
-//	@ApiOperation("API de test")
-//	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
-//	public String testGetPin(@PathVariable("num") int num) {
-//
-//		ListGPIO listGpio = new ListGPIO();
-//		listGpio.getPin(num);
-//		
-//		GpioController gpio = GpioFactory.getInstance();
-//		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(num), "MyLED", PinState.LOW);
-//		
-//		return "Methode testGetPin OK";
-//	}
+	@RequestMapping(value = "/test/{num}", method = RequestMethod.GET)
+	@ApiOperation("API de test")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
+	public String testGetPin(@PathVariable("num") int num) {
+
+		ListGPIO listGpio = new ListGPIO();
+		listGpio.getPin(num);
+		
+		GpioController gpio = GpioFactory.getInstance();
+		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(num), "MyLED", PinState.LOW);
+		
+		return "Methode testGetPin OK";
+	}
 
 	
 	public GpioPinDigitalOutput getPin( int num ) {
