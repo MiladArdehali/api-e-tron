@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class LedController {
 
 	private static GpioPinDigitalOutput pin;
+	private static GpioController gpio = GpioFactory.getInstance();
 
 //	@RequestMapping(value = "/{num1}/{num2}", method = RequestMethod.GET)
 //	@ApiOperation("Afficher le message")
@@ -113,12 +114,12 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String testGetPin(@PathVariable("numPin") int numPin) {
 		
-		pin = null;
-
+		gpio.shutdown();
+		
 		ListGPIO listGpio = new ListGPIO();
 		listGpio.getPin(numPin);
 		
-		GpioController gpio = GpioFactory.getInstance();
+		//GpioController gpio = GpioFactory.getInstance();
 		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
 		
 		return "Methode testGetPin OK";
