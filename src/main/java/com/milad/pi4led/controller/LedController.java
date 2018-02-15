@@ -112,6 +112,8 @@ public class LedController {
 	@ApiOperation("API de test")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String testGetPin(@PathVariable("num") int num) {
+		
+		pin = null;
 
 		ListGPIO listGpio = new ListGPIO();
 		listGpio.getPin(num);
