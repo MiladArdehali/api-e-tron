@@ -18,70 +18,70 @@ public class LedController {
 
 	private static GpioPinDigitalOutput pin;
 
-	@RequestMapping(value = "/{num1}/{num2}", method = RequestMethod.GET)
-	@ApiOperation("Afficher le message")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public JSONObject getMessage(@PathVariable("num1") String num1, @PathVariable("num2") String num2) {
+//	@RequestMapping(value = "/{num1}/{num2}", method = RequestMethod.GET)
+//	@ApiOperation("Afficher le message")
+//	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+//	public JSONObject getMessage(@PathVariable("num1") String num1, @PathVariable("num2") String num2) {
+//
+//		System.out.println(num1.toString());
+//		
+//		JSONObject messageRetour = new JSONObject();
+//		messageRetour.put("num1", num1);
+//		messageRetour.put("num2", num2);
+//
+//		//return "Numero du Gpio à traiter :" + num1 + num2;
+//		return messageRetour;
+//	}
 
-		System.out.println(num1.toString());
-		
-		JSONObject messageRetour = new JSONObject();
-		messageRetour.put("num1", num1);
-		messageRetour.put("num2", num2);
-
-		//return "Numero du Gpio à traiter :" + num1 + num2;
-		return messageRetour;
-	}
-
-	@RequestMapping(value = "/toggle", method = RequestMethod.GET)
+	@RequestMapping(value = "/toggle/{num}", method = RequestMethod.GET)
 	@ApiOperation("Changement etat Port GPIO")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String toggle() {
+	public String toggle(@PathVariable("num") int num) {
 
-		getPin(26).toggle();
+		getPin(num).toggle();
 
 		return "OK";
 
 	}
 
-	@RequestMapping(value = "/checkState", method = RequestMethod.GET)
+	@RequestMapping(value = "/checkState/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("Afficher l'etat du GPIO")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	private String checkState() {
-		return (getPin(26).isHigh() ? "Light is on" : "Light is off");
+	private String checkState(@PathVariable("numPin") int numPin) {
+		return (getPin(numPin).isHigh() ? "Light is on" : "Light is off");
 	}
 
-	@RequestMapping(value = "/on", method = RequestMethod.GET)
+	@RequestMapping(value = "/on/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("Allumer le port")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String on() {
-		getPin(26).high();
+	public String on(@PathVariable("numPin") int numPin) {
+		getPin(numPin).high();
 
-		return checkState();
+		return checkState(numPin);
 	}
 
-	@RequestMapping(value = "/off", method = RequestMethod.GET)
+	@RequestMapping(value = "/off/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("Eteindre le port")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String off() {
-		getPin(26).low();
+	public String off(@PathVariable("numPin") int numPin) {
+		getPin(numPin).low();
 
-		return checkState();
+		return checkState(numPin);
 	}
 
-	@RequestMapping(value = "/blink/{delay}/{duration}", method = RequestMethod.GET)
+	@RequestMapping(value = "/blink/{numPin}/{delay}/{duration}", method = RequestMethod.GET)
 	@ApiOperation("Initier un allumage avec intermediaire")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String blink(@PathVariable("delay") long delay, @PathVariable("duration") long duration) {
-		getPin(26).blink(delay, duration);
+	public String blink(@PathVariable("numPin") int numPin, @PathVariable("delay") long delay, @PathVariable("duration") long duration) {
+		getPin(numPin).blink(delay, duration);
 		return "Light is blinking";
 	}
 
-	@RequestMapping(value = "/pulse/{duration}", method = RequestMethod.GET)
+	@RequestMapping(value = "/pulse/{numPin}/{duration}", method = RequestMethod.GET)
 	@ApiOperation("Mettre en place des pulsion")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String pulse(@PathVariable("duration") long duration) {
-		getPin(26).pulse(duration);
+	public String pulse(@PathVariable("numPin") int numPin, @PathVariable("duration") long duration) {
+		getPin(numPin).pulse(duration);
 		return "Light is pulsing";
 	}
 	
@@ -108,31 +108,31 @@ public class LedController {
 		
 	}
 	
-	@RequestMapping(value = "/test/{num}", method = RequestMethod.GET)
+	@RequestMapping(value = "/test/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("API de test")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
-	public String testGetPin(@PathVariable("num") int num) {
+	public String testGetPin(@PathVariable("numPin") int numPin) {
 		
 		pin = null;
 
 		ListGPIO listGpio = new ListGPIO();
-		listGpio.getPin(num);
+		listGpio.getPin(numPin);
 		
 		GpioController gpio = GpioFactory.getInstance();
-		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(num), "MyLED", PinState.LOW);
+		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
 		
 		return "Methode testGetPin OK";
 	}
 
 	
-	public GpioPinDigitalOutput getPin( int num ) {
+	public GpioPinDigitalOutput getPin( int numPin ) {
 		
 		ListGPIO listGpio = new ListGPIO();
-		listGpio.getPin(num);
+		listGpio.getPin(numPin);
 
 		if (pin == null) {
 			GpioController gpio = GpioFactory.getInstance();
-			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(num), "MyLED", PinState.LOW);
+			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
 		}
 
 		return pin;
