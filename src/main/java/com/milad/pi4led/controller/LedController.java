@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class LedController {
 
 	private static GpioPinDigitalOutput pin;
-	private static GpioController gpio = GpioFactory.getInstance();
 
 //	@RequestMapping(value = "/{num1}/{num2}", method = RequestMethod.GET)
 //	@ApiOperation("Afficher le message")
@@ -109,21 +108,21 @@ public class LedController {
 		
 	}
 	
-	@RequestMapping(value = "/test/{numPin}", method = RequestMethod.GET)
-	@ApiOperation("API de test")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
-	public String testGetPin(@PathVariable("numPin") int numPin) {
-		
-		gpio.shutdown();
-		
-		ListGPIO listGpio = new ListGPIO();
-		listGpio.getPin(numPin);
-		
-		//GpioController gpio = GpioFactory.getInstance();
-		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
-		
-		return "Methode testGetPin OK";
-	}
+//	@RequestMapping(value = "/test/{numPin}", method = RequestMethod.GET)
+//	@ApiOperation("API de test")
+//	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
+//	public String testGetPin(@PathVariable("numPin") int numPin) {
+//		
+//		gpio.shutdown();
+//		
+//		ListGPIO listGpio = new ListGPIO();
+//		listGpio.getPin(numPin);
+//		
+//		//GpioController gpio = GpioFactory.getInstance();
+//		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
+//		
+//		return "Methode testGetPin OK";
+//	}
 
 	
 	public GpioPinDigitalOutput getPin( int numPin ) {
@@ -131,10 +130,10 @@ public class LedController {
 		ListGPIO listGpio = new ListGPIO();
 		listGpio.getPin(numPin);
 
-		if (pin == null) {
+		//if (pin == null) {
 			GpioController gpio = GpioFactory.getInstance();
 			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
-		}
+		//}
 
 		return pin;
 	}
