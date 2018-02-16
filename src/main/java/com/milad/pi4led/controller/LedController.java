@@ -2,6 +2,7 @@ package com.milad.pi4led.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.milad.pi4led.serviceMetier.CommandeService;
 import com.pi4j.io.gpio.*;
 import io.swagger.annotations.*;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ErrorMessages;
@@ -143,17 +144,17 @@ public class LedController {
 		return "Methode testGetPin OK";
 	}
 
-	public GpioPinDigitalOutput getPin(int numPin) {
-
-		ListGPIO listGpio = new ListGPIO();
-		listGpio.getPin(numPin);
-
-		// if (pin == null) {
-		GpioController gpio = GpioFactory.getInstance();
-		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
-		// }
-
-		return pin;
-	}
+//	public GpioPinDigitalOutput getPin(int numPin) {
+//
+//		ListGPIO listGpio = new ListGPIO();
+//		listGpio.getPin(numPin);
+//
+//		// if (pin == null) {
+//		GpioController gpio = GpioFactory.getInstance();
+//		pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), "MyLED", PinState.LOW);
+//		// }
+//
+//		return pin;
+//	}
 
 }
