@@ -23,21 +23,16 @@ import org.springframework.web.bind.annotation.*;
 public class LedController {
 
 	private static GpioPinDigitalOutput pin;
-	public static HashMap<Integer, GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
+	public static HashMap<Integer,GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
+	public static HashMap<Integer,String> infoPinActive = new HashMap<Integer, String>();
+
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
 	@ApiOperation("Afficher le message")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public JSONArray listerPinActive() {
+	public JSONObject listerPinActive() {
 
-		JSONArray listeRetour = new JSONArray();
-		
-		
-		for(Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
-			System.out.println(entry.getKey().getClass());
-			listeRetour.add(entry.getKey());
-			//messageRetour.put(entry.getKey().toString(), entry.getValue().toString());
-		}
+		JSONObject listeRetour = new JSONObject(infoPinActive);
 
 		return listeRetour;
 	}
@@ -160,6 +155,7 @@ public class LedController {
 			GpioController gpio = GpioFactory.getInstance();
 			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomDuPin, PinState.LOW);
 			listPin.put(numPin, pin);
+			infoPinActive.put(numPin, nomDuPin);
 			return "Attribution du port GPIO " + nomDuPin + " OK";
 		} else {
 			return "Ooops! Port n° " + numPin + " est inexistant";
