@@ -120,21 +120,25 @@ public class LedController {
 
 	}
 
-	@RequestMapping(value = "/stopUrgence", method = RequestMethod.GET)
+	@RequestMapping(value = "/stopALL", method = RequestMethod.GET)
 	@ApiOperation("Arret de tous les ports GPIO")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public JSONObject stopUrgence() {
+	public JSONObject stopALL() {
 
 		HashMap<String, String> listeStop = new HashMap<String, String>();
-		if (listPin != null) {
+		if (listPin.size() > 0) {
 			for (Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
 				entry.getValue().low();
 				listeStop.put("Port stoppé num: ", entry.getKey().toString());
 			}
 			JSONObject rapportExtinction = new JSONObject(listeStop);
 			return rapportExtinction;
-		} else {
+		} else if (listPin.size() == 0) {
 			listeStop.put("Erreur: ", "Aucun port actif");
+			JSONObject rapportExtinction = new JSONObject(listeStop);
+			return rapportExtinction;
+		} else {
+			listeStop.put("Erreur: ", "Ce tableau n existe pas");
 			JSONObject rapportExtinction = new JSONObject(listeStop);
 			return rapportExtinction;
 		}
