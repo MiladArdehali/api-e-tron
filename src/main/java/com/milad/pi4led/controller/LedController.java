@@ -29,8 +29,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public JSONObject listerPinActive() {
 
-		JSONObject messageRetour = new JSONObject();
-		JSONObject obj=new JSONObject();
+		JSONObject messageRetour = new JSONObject(listPin);
 		
 		for(Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
 			System.out.println(entry.getKey().getClass());
