@@ -32,7 +32,9 @@ public class LedController {
 		JSONObject messageRetour = new JSONObject();
 		
 		for(Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
-			messageRetour.put(entry.getKey(), entry.getValue());
+			System.out.println(entry.getKey());
+			System.out.println(entry.getValue());
+			//messageRetour.put(entry.getKey(), entry.getValue());
 		}
 
 		return messageRetour;
