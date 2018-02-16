@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +28,18 @@ public class LedController {
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
 	@ApiOperation("Afficher le message")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public JSONObject listerPinActive() {
+	public JSONArray listerPinActive() {
 
-		JSONObject messageRetour = new JSONObject(listPin);
+		JSONArray listeRetour = new JSONArray();
+		
 		
 		for(Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
 			System.out.println(entry.getKey().getClass());
-			System.out.println(entry.getValue().getClass());
+			listeRetour.add(entry.getKey());
 			//messageRetour.put(entry.getKey().toString(), entry.getValue().toString());
 		}
 
-		return messageRetour;
+		return listeRetour;
 	}
 
 	@RequestMapping(value = "/toggle/{numPin}", method = RequestMethod.GET)
