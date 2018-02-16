@@ -30,11 +30,12 @@ public class LedController {
 	public JSONObject listerPinActive() {
 
 		JSONObject messageRetour = new JSONObject();
+		JSONObject obj=new JSONObject();
 		
 		for(Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
-			//messageRetour.put(entry.getKey(), entry.getValue());
+			System.out.println(entry.getKey().getClass());
+			System.out.println(entry.getValue().getClass());
+			//messageRetour.put(entry.getKey().toString(), entry.getValue().toString());
 		}
 
 		return messageRetour;
