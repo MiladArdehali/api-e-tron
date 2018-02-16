@@ -25,6 +25,7 @@ public class LedController {
 	private static GpioPinDigitalOutput pin;
 	public static HashMap<Integer,GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
 	public static HashMap<Integer,String> infoPinActive = new HashMap<Integer, String>();
+	private static GpioController gpio = GpioFactory.getInstance();
 
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
@@ -119,6 +120,18 @@ public class LedController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/stopUrgence", method = RequestMethod.GET)
+	@ApiOperation("Arret de tous les ports GPIO")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+	public String stopUrgence() {
+
+			gpio.shutdown();
+		
+			return "Arret de tous les ports OK";
+		
+
+	}
 
 	@RequestMapping(value = "/infoTechniqueGPIO/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("Obtenir les information technique d'un GPIO")
@@ -152,7 +165,7 @@ public class LedController {
 		listGpio.getPin(numPin);
 
 		if (listPin.get(numPin) == null) {
-			GpioController gpio = GpioFactory.getInstance();
+//			GpioController gpio = GpioFactory.getInstance();
 			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomDuPin, PinState.LOW);
 			listPin.put(numPin, pin);
 			infoPinActive.put(numPin, nomDuPin);
