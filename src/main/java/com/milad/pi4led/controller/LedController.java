@@ -29,8 +29,7 @@ public class LedController {
 	public static HashMap<Integer, GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
 	public static HashMap<Integer, String> infoPinActive = new HashMap<Integer, String>();
 	private static GpioController gpio = GpioFactory.getInstance();
-    final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
-
+	final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
 	@ApiOperation("Afficher le message")
@@ -187,34 +186,35 @@ public class LedController {
 		}
 
 	}
-	
-	
+
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@ApiOperation("Test GPIO input")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
-	public String test() {
+	public String test() throws InterruptedException {
 		String reponse = "je suis dans la methode test";
 		inPut();
+		Thread.sleep(10000);
 		return reponse;
 	}
-	
-	
-	public void inPut() {
-		
-		 myButton.addListener(new GpioPinListenerDigital() {
-	            @Override
-	            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 
-	            	String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState();
-	                System.out.println(reponse);
-	                
-	            }
+	public void inPut() throws InterruptedException {
 
-	        });
+		myButton.setShutdownOptions(true);
 
-		
+		myButton.addListener(new GpioPinListenerDigital() {
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+
+				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState();
+				System.out.println(reponse);
+
+			}
+
+		});
+		 while(true) {
+	            Thread.sleep(500);
+	        }
+
 	}
-	
-	
 
 }
