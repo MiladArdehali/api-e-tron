@@ -131,19 +131,15 @@ public class LedController {
 	public JSONObject stopALL() {
 
 		HashMap<String, String> listeStop = new HashMap<String, String>();
-		if (listPin.size() > 0) {
+		if (listPin != null) {
 			for (Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
 				entry.getValue().low();
 				listeStop.put("Port stoppé num: ", entry.getKey().toString());
 			}
 			JSONObject rapportExtinction = new JSONObject(listeStop);
 			return rapportExtinction;
-		} else if (listPin.size() == 0) {
-			listeStop.put("Erreur: ", "Aucun port actif");
-			JSONObject rapportExtinction = new JSONObject(listeStop);
-			return rapportExtinction;
 		} else {
-			listeStop.put("Erreur: ", "Ce tableau n existe pas");
+			listeStop.put("Erreur: ", "Aucun port actif");
 			JSONObject rapportExtinction = new JSONObject(listeStop);
 			return rapportExtinction;
 		}
@@ -155,7 +151,6 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String numPin(@PathVariable("numPin") int numPin) {
 
-		JSONObject jsonObject = new JSONObject();
 		Pin pin = RaspiPin.getPinByName("GPIO " + numPin);
 
 		if (pin != null) {
