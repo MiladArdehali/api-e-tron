@@ -211,7 +211,7 @@ public class LedController {
 
 		});
 		 while(true) {
-	            Thread.sleep(500);
+	            Thread.sleep(20);
 	        }
 
 	}
