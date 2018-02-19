@@ -188,17 +188,30 @@ public class LedController {
 
 	}
 	
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ApiOperation("Test GPIO input")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
+	public String test() {
+		String reponse = "je suis dans la methode test";
+		inPut();
+		return reponse;
+	}
+	
 	public void inPut() {
+		
 		 myButton.addListener(new GpioPinListenerDigital() {
-			 String reponse;
 	            @Override
 	            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 
-	            	reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState();
+	            	String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState();
 	                System.out.println(reponse);
+	                
 	            }
 
 	        });
+
+		
 	}
 	
 	
