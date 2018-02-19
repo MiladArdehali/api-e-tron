@@ -193,7 +193,6 @@ public class LedController {
 	public String test() throws InterruptedException {
 		String reponse = "je suis dans la methode test";
 		inPut();
-		Thread.sleep(10000);
 		return reponse;
 	}
 
