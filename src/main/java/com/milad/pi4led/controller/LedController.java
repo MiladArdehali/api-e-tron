@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.milad.pi4led.serviceMetier.CommandeService;
 import com.pi4j.io.gpio.*;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
+
 import io.swagger.annotations.*;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ErrorMessages;
 import util.ListGPIO;
@@ -26,6 +29,8 @@ public class LedController {
 	public static HashMap<Integer, GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
 	public static HashMap<Integer, String> infoPinActive = new HashMap<Integer, String>();
 	private static GpioController gpio = GpioFactory.getInstance();
+    final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
+
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
 	@ApiOperation("Afficher le message")
@@ -187,5 +192,20 @@ public class LedController {
 		}
 
 	}
+	
+	public void inPut() {
+		 myButton.addListener(new GpioPinListenerDigital() {
+			 String reponse;
+	            @Override
+	            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+
+	            	reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState();
+	                System.out.println(reponse);
+	            }
+
+	        });
+	}
+	
+	
 
 }
