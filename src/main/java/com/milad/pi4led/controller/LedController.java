@@ -187,16 +187,18 @@ public class LedController {
 
 	}
 
-	@RequestMapping(value = "/intercepterChangementSignal", method = RequestMethod.GET)
-	@ApiOperation("Test GPIO input")
+	@RequestMapping(value = "/intercepterChangementSignal/{numPin}", method = RequestMethod.GET)
+	@ApiOperation("intercepterChangementSignal")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-	public void intercepterChangementSignal() throws InterruptedException {
-		inPut();
+	public void intercepterChangementSignal(int numPin) throws InterruptedException {
+		inPut(numPin);
 	}
 
-	public void inPut() throws InterruptedException {
+	public void inPut(int numPin) throws InterruptedException {
 		
-		final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
+		ListGPIO listGpio = new ListGPIO();
+		listGpio.getPin(numPin);
+		final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(listGpio.getPin(numPin), PinPullResistance.PULL_DOWN);
 
 		myButton.setShutdownOptions(true);
 
