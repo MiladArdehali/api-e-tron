@@ -30,7 +30,6 @@ public class LedController {
 	public static HashMap<Integer, GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
 	public static HashMap<Integer, String> infoPinActive = new HashMap<Integer, String>();
 	private static GpioController gpio = GpioFactory.getInstance();
-	final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
 	@ApiOperation("Afficher le message")
@@ -188,16 +187,16 @@ public class LedController {
 
 	}
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(value = "/intercepterChangementSignal", method = RequestMethod.GET)
 	@ApiOperation("Test GPIO input")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
-	public String test() throws InterruptedException {
-		String reponse = "je suis dans la methode test";
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
+	public void intercepterChangementSignal() throws InterruptedException {
 		inPut();
-		return reponse;
 	}
 
 	public void inPut() throws InterruptedException {
+		
+		final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, PinPullResistance.PULL_DOWN);
 
 		myButton.setShutdownOptions(true);
 
