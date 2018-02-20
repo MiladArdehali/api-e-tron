@@ -45,7 +45,7 @@ public class LedController {
 	@RequestMapping(value = "/toggle/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("Changement etat Port GPIO")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String toggle(@PathVariable("num") int numPin) {
+	public String toggle(@PathVariable("numPin") int numPin) {
 
 		if (listPin.get(numPin) != null) {
 			listPin.get(numPin).toggle();
@@ -207,7 +207,7 @@ public class LedController {
 				
 				Date date = new Date();
 
-				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState() + "a la date :" + date;
+				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState() + " a la date :" + date;
 				System.out.println(reponse);
 
 			}
