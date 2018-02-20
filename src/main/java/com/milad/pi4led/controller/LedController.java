@@ -12,6 +12,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.exception.ErrorMessages;
 import util.ListGPIO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -203,8 +204,10 @@ public class LedController {
 		myButton.addListener(new GpioPinListenerDigital() {
 			@Override
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+				
+				Date date = new Date();
 
-				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState();
+				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState() + "a la date :" + date;
 				System.out.println(reponse);
 
 			}
