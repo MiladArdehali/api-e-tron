@@ -190,11 +190,11 @@ public class LedController {
 	@RequestMapping(value = "/intercepterChangementSignal/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("intercepterChangementSignal")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-	public void intercepterChangementSignal(int numPin) throws InterruptedException {
+	public void intercepterChangementSignal(@PathVariable("numPin") Integer numPin) throws InterruptedException {
 		inPut(numPin);
 	}
 
-	public void inPut(int numPin) throws InterruptedException {
+	public void inPut(Integer numPin) throws InterruptedException {
 		
 		ListGPIO listGpio = new ListGPIO();
 		listGpio.getPin(numPin);
