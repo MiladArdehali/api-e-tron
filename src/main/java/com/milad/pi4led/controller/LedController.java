@@ -199,7 +199,7 @@ public class LedController {
 
 		ListGPIO listGpio = new ListGPIO();
 
-		if (listGpio.getPin(numPin) != null) {
+		if (listGpio.getPin(numPin) == null) {
 
 			final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(listGpio.getPin(numPin),
 					PinPullResistance.PULL_DOWN);
@@ -224,7 +224,7 @@ public class LedController {
 			}
 			
 		} else {
-			return "Pin non attribuer";
+			return "Le GPIO est deja utilisé pour en sortie";
 		}
 	}
 }
