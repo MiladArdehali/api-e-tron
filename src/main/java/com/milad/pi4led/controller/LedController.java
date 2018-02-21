@@ -190,34 +190,41 @@ public class LedController {
 	@RequestMapping(value = "/intercepterChangementSignal/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("intercepterChangementSignal")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-	public void intercepterChangementSignal(@PathVariable("numPin") Integer numPin) throws InterruptedException {
-		inPut(numPin);
+	public String intercepterChangementSignal(@PathVariable("numPin") Integer numPin) throws InterruptedException {
+		String result = inPut(numPin);
+		return result;
 	}
 
-	public void inPut(Integer numPin) throws InterruptedException {
-		
+	public String inPut(Integer numPin) throws InterruptedException {
+
 		ListGPIO listGpio = new ListGPIO();
-		listGpio.getPin(numPin);
-		final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(listGpio.getPin(numPin), PinPullResistance.PULL_DOWN);
 
-		myButton.setShutdownOptions(true);
+		if (listGpio.getPin(numPin) != null) {
 
-		myButton.addListener(new GpioPinListenerDigital() {
-			@Override
-			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-				
-				Date date = new Date();
+			final GpioPinDigitalInput myButton = gpio.provisionDigitalInputPin(listGpio.getPin(numPin),
+					PinPullResistance.PULL_DOWN);
 
-				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin().toString() + " = " + event.getState().toString() + " a la date :" + date.toString();
-				System.out.println(reponse);
+			myButton.setShutdownOptions(true);
 
+			myButton.addListener(new GpioPinListenerDigital() {
+				@Override
+				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+
+					Date date = new Date();
+
+					String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin().toString() + " = "
+							+ event.getState().toString() + " a la date :" + date.toString();
+					System.out.println(reponse);
+
+				}
+
+			});
+			while (true) {
+				Thread.sleep(20);
 			}
-
-		});
-		 while(true) {
-	            Thread.sleep(20);
-	        }
-
+			
+		} else {
+			return "Pin non attribuer";
+		}
 	}
-
 }
