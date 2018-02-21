@@ -208,7 +208,7 @@ public class LedController {
 				
 				Date date = new Date();
 
-				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState() + " a la date :" + date;
+				String reponse = " --> GPIO PIN STATE CHANGE: " + event.getPin().toString() + " = " + event.getState().toString() + " a la date :" + date.toString();
 				System.out.println(reponse);
 
 			}
