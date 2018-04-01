@@ -2,7 +2,6 @@ package com.milad.pi4led.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.milad.pi4led.serviceMetier.CommandeService;
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
@@ -32,7 +31,7 @@ public class LedController {
 	private static GpioController gpio = GpioFactory.getInstance();
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
-	@ApiOperation("Afficher le message")
+	@ApiOperation("Afficher les ports GPIO sollicité")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public JSONObject listerPinActive() {
 
@@ -41,72 +40,31 @@ public class LedController {
 		return listeRetour;
 	}
 
-	@RequestMapping(value = "/toggle/{numPin}", method = RequestMethod.GET)
-	@ApiOperation("Changement etat Port GPIO")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String toggle(@PathVariable("numPin") int numPin) {
-
-		if (listPin.get(numPin) != null) {
-			listPin.get(numPin).toggle();
-			return "OK";
-		} else {
-			return "le port GPIO n° " + numPin + " n'est pas activé pour n'existe pas";
-		}
-
-	}
-
-	@RequestMapping(value = "/checkState/{numPin}", method = RequestMethod.GET)
-	@ApiOperation("Afficher l'etat du GPIO")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	private String checkState(@PathVariable("numPin") int numPin) {
-
-		if (listPin.get(numPin) != null) {
-			return ((listPin.get(numPin)).isHigh() ? "Light is on" : "Light is off");
-		} else {
-			return "le port GPIO n° " + numPin + " n'est pas activé pour n'existe pas";
-		}
-
-	}
-
 	@RequestMapping(value = "/on/{numPin}", method = RequestMethod.GET)
-	@ApiOperation("Allumer le port")
+	@ApiOperation("Allumer un port manuellement")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String on(@PathVariable("numPin") int numPin) {
 
-		if (listPin.get(numPin) != null) {
-			listPin.get(numPin).high();
-			return checkState(numPin);
-		} else {
-			return "le port GPIO n° " + numPin + " n'est pas activé pour n'existe pas";
-		}
+		ListGPIO listGpio = new ListGPIO();
+		String nomPin = "port N° " + numPin;
+		gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomPin, PinState.HIGH);
+
+			return "le port GPIO n° " + numPin + " est activé";
+
 
 	}
 
 	@RequestMapping(value = "/off/{numPin}", method = RequestMethod.GET)
-	@ApiOperation("Eteindre le port")
+	@ApiOperation("Eteindre un port manuellement")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String off(@PathVariable("numPin") int numPin) {
 
-		if (listPin.get(numPin) != null) {
-			listPin.get(numPin).low();
-			return checkState(numPin);
-		} else {
-			return "le port GPIO n° " + numPin + " n'est pas activé pour n'existe pas";
-		}
-	}
+		ListGPIO listGpio = new ListGPIO();
+		String nomPin = "port N° " + numPin;
+		gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomPin, PinState.LOW);
 
-	@RequestMapping(value = "/blink/{numPin}/{delay}/{duration}", method = RequestMethod.GET)
-	@ApiOperation("Initier un allumage avec intermediaire")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String blink(@PathVariable("numPin") int numPin, @PathVariable("delay") long delay,
-			@PathVariable("duration") long duration) {
+		return "le port GPIO n° " + numPin + " est eteind";
 
-		if (listPin.get(numPin) != null) {
-			listPin.get(numPin).blink(delay, duration);
-			return "Light is blinking";
-		} else {
-			return "le port GPIO n° " + numPin + " n'est pas activé pour n'existe pas";
-		}
 
 	}
 
@@ -127,21 +85,9 @@ public class LedController {
 	@RequestMapping(value = "/stopALL", method = RequestMethod.GET)
 	@ApiOperation("Arret de tous les ports GPIO")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public JSONObject stopALL() {
+	public void stopALL() {
 
-		HashMap<String, String> listeStop = new HashMap<String, String>();
-		if (listPin != null) {
-			for (Entry<Integer, GpioPinDigitalOutput> entry : listPin.entrySet()) {
-				entry.getValue().low();
-				listeStop.put("Port stoppé num: ", entry.getKey().toString());
-			}
-			JSONObject rapportExtinction = new JSONObject(listeStop);
-			return rapportExtinction;
-		} else {
-			listeStop.put("Erreur: ", "Aucun port actif");
-			JSONObject rapportExtinction = new JSONObject(listeStop);
-			return rapportExtinction;
-		}
+	//TODO: Methode a faire
 
 	}
 
@@ -168,7 +114,7 @@ public class LedController {
 	}
 
 	@RequestMapping(value = "/attribuerGpioPin/{numPin}/{nomDuPin}", method = RequestMethod.GET)
-	@ApiOperation("API d'activation de port GPIO")
+	@ApiOperation("API d'activation isolé d'un port GPIO")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String attribuerGpioPin(@PathVariable("numPin") Integer numPin, @PathVariable("nomDuPin") String nomDuPin) {
 
@@ -176,7 +122,6 @@ public class LedController {
 		listGpio.getPin(numPin);
 
 		if (listPin.get(numPin) == null) {
-			// GpioController gpio = GpioFactory.getInstance();
 			pin = gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomDuPin, PinState.LOW);
 			listPin.put(numPin, pin);
 			infoPinActive.put(numPin, nomDuPin);
