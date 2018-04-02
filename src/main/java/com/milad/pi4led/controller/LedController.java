@@ -2,6 +2,7 @@ package com.milad.pi4led.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.milad.pi4led.serviceMetier.CommandeService;
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
@@ -10,10 +11,8 @@ import io.swagger.annotations.*;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ErrorMessages;
 import util.ListGPIO;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,6 +28,7 @@ public class LedController {
 	public static HashMap<Integer, GpioPinDigitalOutput> listPin = new HashMap<Integer, GpioPinDigitalOutput>();
 	public static HashMap<Integer, String> infoPinActive = new HashMap<Integer, String>();
 	private static GpioController gpio = GpioFactory.getInstance();
+	private CommandeService commandeService;
 
 	@RequestMapping(value = "listerPinActive", method = RequestMethod.GET)
 	@ApiOperation("Afficher les ports GPIO sollicité")
@@ -50,6 +50,21 @@ public class LedController {
 		gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomPin, PinState.HIGH);
 
 			return "le port GPIO n° " + numPin + " est activé";
+
+
+	}
+	@RequestMapping(value = "/readInstruction/{json}", method = RequestMethod.GET)
+	@ApiOperation("Lire les instructions")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+	public String readInstruction(@PathVariable("json") JSONArray instruction) {
+
+
+		if(commandeService.attribuerPort(instruction))
+			commandeService.readJsonInstruction(instruction);
+		else
+			return "echec lors de l'attribution des ports";
+
+		return "instruction terminé";
 
 
 	}
