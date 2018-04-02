@@ -35,6 +35,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public JSONObject listerPinActive() {
 
+		System.out.println("API : " + "listerPinActive");
 		JSONObject listeRetour = new JSONObject(infoPinActive);
 
 		return listeRetour;
@@ -45,6 +46,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String on(@PathVariable("numPin") int numPin) {
 
+		System.out.println("API : " + "on");
+		System.out.println("variable : " + numPin);
 		ListGPIO listGpio = new ListGPIO();
 		String nomPin = "port N° " + numPin;
 		gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomPin, PinState.HIGH);
@@ -59,6 +62,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String ValidationPort(@PathVariable("json") JSONArray instruction) {
 
+		System.out.println("API : " + "ValidationPort");
+		System.out.println("variable : " + instruction.toString());
 		if(commandeService.attribuerPort(instruction))
 			return "validation et reservation terminé";
 		else
@@ -71,6 +76,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String LoadInstruction(@PathVariable("json") JSONArray instruction) {
 
+		System.out.println("API : " + "LoadInstruction");
+		System.out.println("variable : " + instruction.toString());
 		if(commandeService.loadJsonInstruction(instruction))
 			return " instruction chargé avec succes ";
 		else
@@ -83,7 +90,7 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String ExecuteInstruction() {
 
-
+		System.out.println("API : " + "ExecuteInstruction");
 		if(commandeService.isInstructionExist())
 			commandeService.execute();
 		else
@@ -99,6 +106,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String off(@PathVariable("numPin") int numPin) {
 
+		System.out.println("API : " + "off");
+		System.out.println("variable : " + numPin);
 		ListGPIO listGpio = new ListGPIO();
 		String nomPin = "port N° " + numPin;
 		gpio.provisionDigitalOutputPin(listGpio.getPin(numPin), nomPin, PinState.LOW);
@@ -113,6 +122,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
 	public String pulse(@PathVariable("numPin") int numPin, @PathVariable("duration") long duration) {
 
+		System.out.println("API : " + "pulse");
+		System.out.println("variable : " + duration);
 		if (listPin.get(numPin) != null) {
 			listPin.get(numPin).pulse(duration);
 			return "Light is pulsing";
@@ -136,6 +147,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String numPin(@PathVariable("numPin") int numPin) {
 
+		System.out.println("API : " + "numPin");
+		System.out.println("variable : " + numPin);
 		Pin pin = RaspiPin.getPinByName("GPIO " + numPin);
 
 		if (pin != null) {
@@ -158,6 +171,8 @@ public class LedController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class) })
 	public String attribuerGpioPin(@PathVariable("numPin") Integer numPin, @PathVariable("nomDuPin") String nomDuPin) {
 
+		System.out.println("API : " + "attribuerGpioPin");
+		System.out.println("variable : " + nomDuPin);
 		ListGPIO listGpio = new ListGPIO();
 		listGpio.getPin(numPin);
 
@@ -171,7 +186,7 @@ public class LedController {
 		}
 
 	}
-
+/*
 	@RequestMapping(value = "/intercepterChangementSignal/{numPin}", method = RequestMethod.GET)
 	@ApiOperation("intercepterChangementSignal")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
@@ -212,5 +227,5 @@ public class LedController {
 			return "Le GPIO est deja utilisé pour en sortie";
 		}
 	}
-
+*/
 }
