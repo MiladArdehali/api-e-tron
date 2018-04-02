@@ -27,7 +27,11 @@ public class CommandeService {
 		ListGPIO listGpio = new ListGPIO();
 		Boolean attribution = true;
 
-		for (int i=0; i < attributionPortJSON.size(); i++) {
+		System.out.println(attributionPortJSON.toString());
+
+		for (int i=0; i < (attributionPortJSON.size())-1; i++) {
+			System.out.println("Methode AttribuerPort, boucle for qui parcours les elements du JSONarray - n° " + i);
+
 			if(portDisponible.contains(attributionPortJSON.get(i))
 					&& listPinNeed.get(attributionPortJSON.get(i)) == null
 					&& attribution) {
@@ -37,35 +41,51 @@ public class CommandeService {
 
 			} else {
 				attribution = false;
+				System.out.println(attribution);
 				return attribution;
 			}
 		}
 
+		System.out.println(attribution);
 		return attribution;
 	}
 
 	public Boolean loadJsonInstruction (JSONArray instructionJson) {
 
-		for (int i = 0; i < instructionJson.size(); i++ ) {
+		System.out.println("Methode loadJsonInstruction");
+		System.out.println(instructionJson.toString());
+
+
+		for (int i = 0; i < (instructionJson.size())-1; i++ ) {
+			System.out.println("Methode loadJsonInstruction, boucle for qui parcours les elements du JSONarray - n° " + i);
 			JSONObject jsonObject = (JSONObject) instructionJson.get(i);
 			if (listPinNeed.containsKey(jsonObject.get("port"))){
 				listMoveBO.add(jsonObjectToListMoveBO(jsonObject));
 			} else {
+				System.out.println("false");
 				return false;
 			}
 		}
+		System.out.println("true");
 		return true;
 	}
 
 	public MoveBO jsonObjectToListMoveBO(JSONObject jsonObject) {
 
-			MoveBO moveBO = new MoveBO((Integer) jsonObject.get("port"), (Integer)jsonObject.get("time"));
-			listMoveBO.add(moveBO);
+		System.out.println("Methode jsonObjectToListMoveBO");
+		System.out.println(jsonObject.toString());
+
+		MoveBO moveBO = new MoveBO((Integer) jsonObject.get("port"), (Integer)jsonObject.get("time"));
+		listMoveBO.add(moveBO);
+
+		System.out.println("Retour : " + moveBO.toString());
 
 		return moveBO;
 	}
 
 	public Boolean execute () {
+
+		System.out.println("Methode execute");
 
 		Boolean exectution = true;
 
@@ -78,15 +98,23 @@ public class CommandeService {
 				e.printStackTrace();
 			}
 		}
+
+		System.out.println("Retour : " + exectution);
+
 		return exectution;
 	}
 
 	public Boolean isInstructionExist (){
 
-		if (listMoveBO != null)
+		System.out.println("Methode isInstructionExist");
+
+		if (listMoveBO != null) {
+			System.out.println("true");
 			return true;
-		else
+		} else {
+			System.out.println("false");
 			return false;
+		}
 	}
 
 }
