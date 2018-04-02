@@ -65,11 +65,11 @@ public class LedController {
 
 		System.out.println("API : " + "ValidationPort");
 		System.out.println("variable : " + instruction.toString());
-		if(commandeService.attribuerPort(instruction))
+		if(commandeService.attribuerPort(instruction)) {
 			return "validation et reservation terminé";
-		else
+		} else {
 			return "echec lors de la validation ou la reservation des ports";
-
+		}
 	}
 
 	@RequestMapping(value = "/loadInstruction/{json}", method = RequestMethod.GET)
