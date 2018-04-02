@@ -61,11 +61,20 @@ public class LedController {
 	@RequestMapping(value = "/reservePort/{ArrayList}", method = RequestMethod.GET)
 	@ApiOperation("Validation et reservation des ports")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String ValidationPort(@PathVariable("ArrayList") ArrayList<Integer> instruction) {
+	public String ValidationPort(@PathVariable("ArrayList") JSONArray instruction) {
 
 		System.out.println("API : " + "ValidationPort");
 		System.out.println("variable : " + instruction.toString());
-		if(commandeService.attribuerPort(instruction)) {
+
+		ArrayList<Integer> list = new ArrayList<Integer>();
+
+		if (instruction != null) {
+
+			for (int i=0;i<instruction.size();i++){
+				list.add((Integer) instruction.get(i));
+			}
+		}
+		if(commandeService.attribuerPort(list)) {
 			return "validation et reservation terminé";
 		} else {
 			return "echec lors de la validation ou la reservation des ports";
