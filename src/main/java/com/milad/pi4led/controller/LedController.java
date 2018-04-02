@@ -11,6 +11,7 @@ import io.swagger.annotations.*;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ErrorMessages;
 import util.ListGPIO;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -57,10 +58,10 @@ public class LedController {
 
 	}
 
-	@RequestMapping(value = "/reservePort/{json}", method = RequestMethod.GET)
+	@RequestMapping(value = "/reservePort/{ArrayList}", method = RequestMethod.GET)
 	@ApiOperation("Validation et reservation des ports")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String ValidationPort(@PathVariable("json") JSONArray instruction) {
+	public String ValidationPort(@PathVariable("ArrayList") ArrayList<Integer> instruction) {
 
 		System.out.println("API : " + "ValidationPort");
 		System.out.println("variable : " + instruction.toString());

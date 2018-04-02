@@ -22,12 +22,13 @@ public class CommandeService {
 	private List<MoveBO> listMoveBO;
 
 
-	public Boolean attribuerPort (JSONArray attributionPortJSON) {
+	public Boolean attribuerPort (ArrayList<Integer> attributionPortJSON) {
 
 		ListGPIO listGpio = new ListGPIO();
 		Boolean attribution = true;
 
 		System.out.println(attributionPortJSON.toString());
+        System.out.println(attributionPortJSON.size());
 
 		for (int i=0; i < (attributionPortJSON.size())-1; i++) {
 			System.out.println("Methode AttribuerPort, boucle for qui parcours les elements du JSONarray - n° " + i);
