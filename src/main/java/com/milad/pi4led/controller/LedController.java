@@ -2,6 +2,7 @@ package com.milad.pi4led.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.milad.pi4led.move.MoveBO;
 import com.milad.pi4led.serviceMetier.CommandeService;
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
@@ -53,16 +54,41 @@ public class LedController {
 
 
 	}
-	@RequestMapping(value = "/readInstruction/{json}", method = RequestMethod.GET)
-	@ApiOperation("Lire les instructions")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
-	public String readInstruction(@PathVariable("json") JSONArray instruction) {
 
+	@RequestMapping(value = "/reservePort/{json}", method = RequestMethod.GET)
+	@ApiOperation("Validation et reservation des ports")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+	public String ValidationPort(@PathVariable("json") JSONArray instruction) {
 
 		if(commandeService.attribuerPort(instruction))
-			commandeService.readJsonInstruction(instruction);
+			return "validation et reservation terminé";
 		else
-			return "echec lors de l'attribution des ports";
+			return "echec lors de la validation ou la reservation des ports";
+
+	}
+
+	@RequestMapping(value = "/loadInstruction/{json}", method = RequestMethod.GET)
+	@ApiOperation("Chargement des instructions")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+	public String LoadInstruction(@PathVariable("json") JSONArray instruction) {
+
+		if(commandeService.loadJsonInstruction(instruction))
+			return " instruction chargé avec succes ";
+		else
+			return "echec lors du chargements des instructions, verifier les données à traiter";
+
+	}
+
+	@RequestMapping(value = "/execInstruction/{json}", method = RequestMethod.GET)
+	@ApiOperation("Exectuter les instructions")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ErrorMessages.class) })
+	public String ExecuteInstruction() {
+
+
+		if(commandeService.isInstructionExist())
+			commandeService.execute();
+		else
+			return "Aucune instruction n'est chargé";
 
 		return "instruction terminé";
 
@@ -187,4 +213,5 @@ public class LedController {
 			return "Le GPIO est deja utilisé pour en sortie";
 		}
 	}
+
 }
