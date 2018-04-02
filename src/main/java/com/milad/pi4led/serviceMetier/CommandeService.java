@@ -27,7 +27,7 @@ public class CommandeService {
 		ListGPIO listGpio = new ListGPIO();
 		Boolean attribution = true;
 
-		for (int i=0; i>attributionPortJSON.size(); i++) {
+		for (int i=0; i < attributionPortJSON.size(); i++) {
 			if(portDisponible.contains(attributionPortJSON.get(i))
 					&& listPinNeed.get(attributionPortJSON.get(i)) == null
 					&& attribution) {

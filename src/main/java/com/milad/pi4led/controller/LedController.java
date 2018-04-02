@@ -2,7 +2,6 @@ package com.milad.pi4led.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.milad.pi4led.move.MoveBO;
 import com.milad.pi4led.serviceMetier.CommandeService;
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
